@@ -14,13 +14,13 @@ public class Credenciales {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "correo_electronico", nullable = false, unique = true)
-    private String correoElectronico;
+    @Column(nullable = false, unique = true)
+    private String correo;
 
     @Column(nullable = false)
-    private String contrasena;
+    private String password;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 }
