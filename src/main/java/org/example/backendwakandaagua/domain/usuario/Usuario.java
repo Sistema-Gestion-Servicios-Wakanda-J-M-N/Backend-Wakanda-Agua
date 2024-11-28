@@ -20,20 +20,16 @@ public class Usuario {
     private String nombre;
 
     @Column(nullable = false)
-    private String apellido;
+    private String apellidos;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
-    private String telefono;
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Credenciales credenciales;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Credenciales credenciales; // Relación con credenciales
-
-    @ElementCollection
-    @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "usuario_id"))
     @Column(name = "rol")
     private List<String> roles;
 }
-
