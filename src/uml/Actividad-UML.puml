@@ -1,0 +1,49 @@
+@startuml
+start
+
+:Inicio del sistema;
+
+partition "Consulta de Información General" {
+    :Usuario solicita información de la planta;
+    :Consultar PlantaTratamiento;
+    :Obtener DatosCalidadAgua;
+    :Devolver información general al usuario;
+}
+
+partition "Lecturas de Calidad del Agua" {
+    if ("¿Usuario solicita lecturas de nivel de pH?") then (Sí)
+        :Consultar Sensor;
+        :Obtener lecturas históricas de LecturaSensor;
+        :Devolver lecturas de nivel de pH al usuario;
+    endif
+    if ("¿Usuario solicita lecturas de pureza del agua?") then (Sí)
+        :Consultar Sensor;
+        :Obtener lecturas históricas de LecturaSensor;
+        :Devolver lecturas de pureza al usuario;
+    endif
+    if ("¿Usuario solicita lecturas de contaminantes?") then (Sí)
+        :Consultar Sensor;
+        :Obtener lecturas históricas de LecturaSensor;
+        :Devolver lecturas de contaminantes al usuario;
+    endif
+}
+
+partition "Lecturas de Operación de la Planta" {
+    if ("¿Usuario solicita caudal del agua procesada?") then (Sí)
+        :Consultar Sensor;
+        :Obtener lecturas históricas de LecturaSensor;
+        :Devolver lecturas de caudal al usuario;
+    endif
+    if ("¿Usuario solicita temperatura del agua?") then (Sí)
+        :Consultar Sensor;
+        :Obtener lecturas históricas de LecturaSensor;
+        :Devolver lecturas de temperatura al usuario;
+    endif
+}
+
+partition "Finalización" {
+    :Finalizar interacción;
+}
+
+stop
+@enduml

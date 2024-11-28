@@ -1,0 +1,45 @@
+@startuml
+actor "Usuario Visitante" as Visitante
+
+participant "PlantaTratamiento" as Planta
+participant "Sensor" as Sensor
+participant "LecturaSensor" as Lectura
+participant "DatosCalidadAgua" as Datos
+
+== Consultar información general de la planta ==
+Visitante -> Planta : Solicitar información general
+Planta --> Datos : Obtener datos de calidad del agua
+Datos --> Planta : Devolver datos generales
+Planta --> Visitante : Enviar información general
+
+== Visualizar lecturas de nivel de pH ==
+Visitante -> Sensor : Solicitar lecturas de nivel de pH
+Sensor --> Lectura : Obtener lecturas históricas
+Lectura --> Sensor : Devolver lecturas de pH
+Sensor --> Visitante : Enviar lecturas de pH
+
+== Visualizar lecturas de pureza del agua ==
+Visitante -> Sensor : Solicitar lecturas de pureza
+Sensor --> Lectura : Obtener lecturas históricas
+Lectura --> Sensor : Devolver lecturas de pureza
+Sensor --> Visitante : Enviar lecturas de pureza
+
+== Visualizar lecturas de contaminantes detectados ==
+Visitante -> Sensor : Solicitar lecturas de contaminantes
+Sensor --> Lectura : Obtener lecturas históricas
+Lectura --> Sensor : Devolver lecturas de contaminantes
+Sensor --> Visitante : Enviar lecturas de contaminantes
+
+== Visualizar caudal de agua procesada ==
+Visitante -> Sensor : Solicitar lecturas de caudal
+Sensor --> Lectura : Obtener lecturas históricas
+Lectura --> Sensor : Devolver lecturas de caudal
+Sensor --> Visitante : Enviar lecturas de caudal
+
+== Visualizar temperatura del agua ==
+Visitante -> Sensor : Solicitar lecturas de temperatura
+Sensor --> Lectura : Obtener lecturas históricas
+Lectura --> Sensor : Devolver lecturas de temperatura
+Sensor --> Visitante : Enviar lecturas de temperatura
+@enduml
+

@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+
+actor "Usuario Visitante" as Visitante
+
+package "Casos de Uso" {
+
+usecase "Consultar información general de la planta" as UC1
+usecase "Visualizar lecturas de nivel de pH" as UC2
+usecase "Visualizar lecturas de pureza del agua" as UC3
+usecase "Visualizar lecturas de contaminantes detectados" as UC4
+usecase "Visualizar caudal de agua procesada" as UC5
+usecase "Visualizar temperatura del agua" as UC6
+
+    Visitante --> UC1 : "Consulta general"
+    Visitante --> UC2 : "Lecturas de pH"
+    Visitante --> UC3 : "Lecturas de pureza"
+    Visitante --> UC4 : "Lecturas de contaminantes"
+    Visitante --> UC5 : "Lecturas de caudal"
+    Visitante --> UC6 : "Lecturas de temperatura"
+
+}
+@enduml
