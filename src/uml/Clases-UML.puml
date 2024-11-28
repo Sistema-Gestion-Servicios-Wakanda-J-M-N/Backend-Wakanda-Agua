@@ -10,7 +10,6 @@ package "Dominio" {
             - capacidadMaximaLitros: Double
             - estadoOperativo: String
             - tipoTratamiento: String
-            - personalEncargado: List<Personal>
         }
 
         ' Datos de Calidad del Agua gestionados por la planta
