@@ -35,9 +35,6 @@ public class DatosCalidadAgua {
     @Column(name = "temperatura_celsius", nullable = false)
     private Double temperaturaCelsius;
 
-    @OneToOne(mappedBy = "planta_Tratamiento", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "datosCalidadAgua", cascade = CascadeType.ALL, orphanRemoval = true)
     private PlantaTratamiento plantaTratamiento; // Relación con PlantaTratamiento
-
-    @OneToOne(mappedBy = "sensor_", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Sensor sensor; // Relación con Sensor
 }

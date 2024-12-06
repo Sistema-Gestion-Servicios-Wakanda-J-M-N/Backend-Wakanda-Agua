@@ -1,35 +1,38 @@
 services:
-  mysql:
+  mysql-wakanda:
     image: mysql:8.0
     environment:
       - MYSQL_DATABASE=Backend-Wakanda-Agua
       - MYSQL_ROOT_PASSWORD=P@ssw0rd
     ports:
-      - "3318:3317"
-    container_name: mysql-wakanda-1
+      - "3317:3306"
+    container_name: mysql-wakanda-agua
     networks:
       - backend-network
+    volumes:
+      - mysql-data:/var/lib/mysql
 
-  backend-wakanda-agua:
+  backend_wakanda_agua:
     build:
-      context: ./  # Directorio del Dockerfile del microservicio
+      context: .
     ports:
-      - "8085:8095"  # Mapea el puerto para el microservicio
-    container_name: backendwakandaagua
+      - "8085:8095"
+    container_name: backend_wakanda_agua
     networks:
       - backend-network
     environment:
       - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
       - SPRING_PROFILES_ACTIVE=default
       - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-wakanda-1:3317/Backend-Wakanda-Agua?serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-wakanda-agua:3306/Backend-Wakanda-Agua?serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=P@ssw0rd
-    entrypoint: [
-      "./wait-for-it.sh", "eureka-server:8761", "-t", "60", "--",
-      "./wait-for-it.sh", "mysql-wakanda-1:3317", "-t", "60", "--",
-      "java", "-jar", "/app/backendwakandaagua.jar"
-    ]
+    entrypoint:
+      [
+        "./wait-for-it.sh", "eureka-server:8761", "-t", "60", "--",
+        "./wait-for-it.sh", "mysql-wakanda-agua:3306", "-t", "60", "--",
+        "java", "-jar", "/app/backend-wakanda-agua.jar",
+      ]
 
 volumes:
   mysql-data:
