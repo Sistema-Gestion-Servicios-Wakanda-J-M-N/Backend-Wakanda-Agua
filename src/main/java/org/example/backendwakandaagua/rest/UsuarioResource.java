@@ -1,6 +1,7 @@
 package org.example.backendwakandaagua.rest;
 
 import org.example.backendwakandaagua.model.usuario.UsuarioDTO;
+import org.example.backendwakandaagua.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

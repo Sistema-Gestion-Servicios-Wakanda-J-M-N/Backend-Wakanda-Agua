@@ -10,5 +10,6 @@ public class PlantaTratamientoDTO {
     private Double capacidadMaximaLitros;
     private String estadoOperativo;
     private String tipoTratamiento;
+    private DatosCalidadAguaDTO datosCalidadAgua;
 }
 

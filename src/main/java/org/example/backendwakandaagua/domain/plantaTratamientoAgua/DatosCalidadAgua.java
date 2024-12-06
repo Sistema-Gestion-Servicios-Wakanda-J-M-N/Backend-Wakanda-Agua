@@ -3,6 +3,7 @@ package org.example.backendwakandaagua.domain.plantaTratamientoAgua;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.backendwakandaagua.domain.sensores.Sensor;
 
 import java.time.LocalDateTime;
 
@@ -34,7 +35,9 @@ public class DatosCalidadAgua {
     @Column(name = "temperatura_celsius", nullable = false)
     private Double temperaturaCelsius;
 
-    @OneToOne
-    @JoinColumn(name = "planta_id", nullable = false)
+    @OneToOne(mappedBy = "planta_Tratamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private PlantaTratamiento plantaTratamiento; // Relación con PlantaTratamiento
+
+    @OneToOne(mappedBy = "sensor_", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Sensor sensor; // Relación con Sensor
 }
