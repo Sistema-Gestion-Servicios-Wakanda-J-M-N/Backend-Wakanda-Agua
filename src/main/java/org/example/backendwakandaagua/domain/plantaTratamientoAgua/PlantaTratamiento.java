@@ -28,5 +28,10 @@ public class PlantaTratamiento {
 
     @Column(name = "tipo_tratamiento", nullable = false)
     private String tipoTratamiento;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "datos_calidad_agua_id") // Indica la columna en la base de datos
+    private DatosCalidadAgua datosCalidadAgua; // Relación con DatosCalidadAgua
 }
+
 

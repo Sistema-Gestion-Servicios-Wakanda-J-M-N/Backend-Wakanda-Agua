@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.backendwakandaagua.domain.plantaTratamientoAgua.PlantaTratamiento;
+import org.example.backendwakandaagua.domain.plantaTratamientoAgua.DatosCalidadAgua;
 
 import java.util.List;
 
@@ -29,10 +30,14 @@ public class Sensor {
     @Column(nullable = false)
     private String estado;
 
-    @ManyToOne
-    @JoinColumn(name = "planta_id", nullable = false)
-    private PlantaTratamiento plantaTratamiento; // Relación con PlantaTratamiento
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "planta_id", nullable = true)
+    private PlantaTratamiento plantaTratamiento;
 
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LecturaSensor> lecturas; // Relación con lecturas históricas
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "datos_calidad_agua_id")
+    private DatosCalidadAgua datosCalidadAgua; // Relación con los datos actuales de calidad del agua
 }

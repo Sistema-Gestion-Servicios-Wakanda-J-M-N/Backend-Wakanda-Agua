@@ -11,6 +11,7 @@ public class LecturaSensorDTO {
     private Double valorMedido;
     private String unidadMedida;
     private String tipoParametro;
+    private Long sensorId;
 }
 
 

@@ -19,7 +19,7 @@ public class UsuarioDTO {
 
     @NotNull
     @Size(max = 255)
-    private String apellidos;
+    private String apellido;
 
     @NotNull
     @Size(max = 255)

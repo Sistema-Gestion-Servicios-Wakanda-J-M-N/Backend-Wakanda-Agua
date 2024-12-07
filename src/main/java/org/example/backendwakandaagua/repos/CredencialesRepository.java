@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface CredencialesRepository extends JpaRepository<Credenciales, Long> {
     // Encuentra credenciales por correo electrónico
     Optional<Credenciales> findByCorreo(String correoElectronico);
+    Optional<Credenciales> findByUsuarioId(Long usuarioId);
+    void deleteByUsuarioId(Long usuarioId);
 }
