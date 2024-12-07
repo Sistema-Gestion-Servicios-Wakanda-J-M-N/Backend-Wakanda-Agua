@@ -6,6 +6,7 @@ import org.example.backendwakandaagua.domain.sensores.Sensor;
 import org.example.backendwakandaagua.domain.sensores.LecturaSensor;
 import org.example.backendwakandaagua.domain.plantaTratamientoAgua.DatosCalidadAgua;
 import org.example.backendwakandaagua.model.plantaTratamientoAgua.PlantaTratamientoDTO;
+import org.example.backendwakandaagua.model.sensores.LecturaSensorDTO;
 import org.example.backendwakandaagua.model.sensores.SensorDTO;
 import org.example.backendwakandaagua.repos.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,7 +180,16 @@ public class SensorService {
             nuevaLectura.setSensor(sensor);
 
             // Usar el servicio para crear la lectura
-            lecturaSensorService.create(nuevaLectura);
+            LecturaSensorDTO lecturaCreada = lecturaSensorService.create(nuevaLectura);
+
+            // Imprimir la lectura creada
+            System.out.println("Lectura creada:");
+            System.out.println("ID: " + lecturaCreada.getId());
+            System.out.println("Fecha Registro: " + lecturaCreada.getFechaRegistro());
+            System.out.println("Valor Medido: " + lecturaCreada.getValorMedido());
+            System.out.println("Unidad Medida: " + lecturaCreada.getUnidadMedida());
+            System.out.println("Tipo Parametro: " + lecturaCreada.getTipoParametro());
+            System.out.println("Sensor ID: " + lecturaCreada.getSensorId());
 
             // Actualizar el sensor con los nuevos datos
             sensor.setUltimaFechaEvento(String.valueOf(LocalDateTime.now()));

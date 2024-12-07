@@ -29,7 +29,7 @@ public class LecturaSensorService {
     }
 
     // Convertir DTO a entidad
-    private LecturaSensor toEntity(LecturaSensorDTO dto) {
+    public LecturaSensor toEntity(LecturaSensorDTO dto) {
         LecturaSensor lectura = new LecturaSensor();
         lectura.setId(dto.getId());
         lectura.setFechaRegistro(dto.getFechaRegistro());
