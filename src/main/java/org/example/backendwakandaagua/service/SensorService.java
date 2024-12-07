@@ -157,8 +157,7 @@ public class SensorService {
         for (int i = 0; i < plantas.size(); i++) {
             PlantaTratamiento planta = plantas.get(i);
             Sensor sensor = sensores.get(i);
-
-            plantaTratamientoService.update(planta.getId(), plantaTratamientoService.toDTO(planta));
+            planta.setDatosCalidadAgua(DatosCalidadAguaService.generarDatosAleatorios());
             // Obtener los datos de calidad de la planta
             DatosCalidadAgua nuevosDatos = planta.getDatosCalidadAgua();
             System.out.println("Nuevos datos obtenidos:");

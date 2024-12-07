@@ -18,8 +18,6 @@ public class DatosCalidadAguaService {
     @Autowired
     private DatosCalidadAguaRepository datosCalidadAguaRepository;
 
-    private final Random random = new Random();
-
     // Convertir entidad a DTO
     public DatosCalidadAguaDTO toDTO(DatosCalidadAgua datos) {
         DatosCalidadAguaDTO dto = new DatosCalidadAguaDTO();
@@ -91,8 +89,9 @@ public class DatosCalidadAguaService {
     }
 
     // Generar datos aleatorios para calidad del agua
-    public DatosCalidadAgua generarDatosAleatorios() {
+    public static DatosCalidadAgua generarDatosAleatorios() {
         DatosCalidadAgua datos = new DatosCalidadAgua();
+        Random random = new Random();
 
         datos.setFechaMedicion(LocalDateTime.now());
         datos.setNivelPH(6.5 + (8.5 - 6.5) * random.nextDouble()); // Valores entre 6.5 y 8.5

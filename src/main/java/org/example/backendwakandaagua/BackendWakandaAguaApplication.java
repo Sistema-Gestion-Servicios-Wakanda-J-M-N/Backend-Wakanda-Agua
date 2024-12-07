@@ -2,12 +2,10 @@ package org.example.backendwakandaagua;
 
 import org.example.backendwakandaagua.domain.sensores.LecturaSensor;
 import org.example.backendwakandaagua.domain.sensores.Sensor;
-import org.example.backendwakandaagua.domain.usuario.Usuario;
 import org.example.backendwakandaagua.model.usuario.UsuarioDTO;
 import org.example.backendwakandaagua.model.plantaTratamientoAgua.PlantaTratamientoDTO;
 import org.example.backendwakandaagua.model.sensores.SensorDTO;
 import org.example.backendwakandaagua.model.sensores.LecturaSensorDTO;
-import org.example.backendwakandaagua.model.plantaTratamientoAgua.DatosCalidadAguaDTO;
 import org.example.backendwakandaagua.repos.SensorRepository;
 import org.example.backendwakandaagua.service.*;
 import org.springframework.boot.SpringApplication;
@@ -62,9 +60,9 @@ public class BackendWakandaAguaApplication {
         List<UsuarioDTO> listaUsuarios = usuarioService.findAll();
         System.out.println("Lista de usuarios: " + listaUsuarios);
 
-        // DELETE usuario
-        usuarioService.delete(usuarioId);
-        System.out.println("Usuario con ID " + usuarioId + " eliminado.");
+        // DELETE usuario (OMITIDO)
+        // usuarioService.delete(usuarioId);
+        System.out.println("Omitiendo la eliminación del usuario con ID " + usuarioId + " (no se borra nada).");
 
         // ========================
         // TEST CRUD PLANTA TRATAMIENTO
@@ -94,14 +92,14 @@ public class BackendWakandaAguaApplication {
         List<PlantaTratamientoDTO> listaPlantas = plantaService.findAll();
         System.out.println("Lista de plantas: " + listaPlantas);
 
-        // DELETE planta
-        plantaService.delete(plantaActualizada.getId());
-        System.out.println("Planta con ID " + plantaActualizada.getId() + " eliminada.");
+        // DELETE planta (OMITIDO)
+        // plantaService.delete(plantaActualizada.getId());
+        System.out.println("Omitiendo la eliminación de la planta con ID " + plantaActualizada.getId() + " (no se borra nada).");
 
         // ========================
-        // TEST CRUD SENSOR (Planta ya creada antes del sensor, pero la borramos arriba)
-        // Simplemente cumplir la condición de crear planta antes del sensor
-        // Aquí creamos una nueva planta antes del sensor:
+        // TEST CRUD SENSOR
+        // ========================
+        // Creando planta antes del sensor (aunque no la eliminemos esta vez)
         PlantaTratamientoDTO plantaParaSensor = new PlantaTratamientoDTO();
         plantaParaSensor.setNombre("Planta Sensor");
         plantaParaSensor.setUbicacion("Ubicacion Sensor");
@@ -135,15 +133,15 @@ public class BackendWakandaAguaApplication {
         List<SensorDTO> listaSensores = sensorService.findAll();
         System.out.println("Lista de sensores: " + listaSensores);
 
-        // NOTA: No lo borramos todavía porque lo usaremos para LecturaSensor
-        // Luego lo eliminaremos al final.
+        // No borrar el sensor ni la planta ahora, solo omitimos
+        System.out.println("Omitiendo la eliminación del sensor y la planta de sensor (no se borra nada).");
 
         // ========================
         // TEST CRUD LECTURA SENSOR
         // ========================
         System.out.println("\n=== TEST CRUD LECTURA SENSOR ===");
 
-        // Para crear una LecturaSensor necesitamos el sensor entidad
+        // Obtener el sensor entidad
         Sensor sensorEntidad = sensorRepository.findById(sensorActualizado.getId())
                 .orElseThrow(() -> new RuntimeException("Sensor no encontrado para LecturaSensor"));
 
@@ -171,19 +169,18 @@ public class BackendWakandaAguaApplication {
         List<LecturaSensorDTO> listaLecturas = lecturaSensorService.findAll();
         System.out.println("Lista de lecturas: " + listaLecturas);
 
-        // DELETE lectura
-        lecturaSensorService.delete(lecturaActualizada.getId());
-        System.out.println("Lectura con ID " + lecturaActualizada.getId() + " eliminada.");
+        // DELETE lectura (OMITIDO)
+        // lecturaSensorService.delete(lecturaActualizada.getId());
+        System.out.println("Omitiendo la eliminación de la lectura con ID " + lecturaActualizada.getId() + " (no se borra nada).");
 
-        // Ahora eliminamos el sensor que creamos
-        sensorService.delete(sensorActualizado.getId());
-        System.out.println("Sensor con ID " + sensorActualizado.getId() + " eliminado.");
+        // Omitir la eliminación del sensor que creamos
+        // sensorService.delete(sensorActualizado.getId());
+        System.out.println("Omitiendo la eliminación del sensor con ID " + sensorActualizado.getId() + " (no se borra nada).");
 
-        // Finalmente, eliminamos la planta utilizada para el sensor
-        plantaService.delete(plantaSensorCreada.getId());
-        System.out.println("Planta con ID " + plantaSensorCreada.getId() + " eliminada.");
+        // Omitir la eliminación de la planta utilizada para el sensor
+        // plantaService.delete(plantaSensorCreada.getId());
+        System.out.println("Omitiendo la eliminación de la planta con ID " + plantaSensorCreada.getId() + " (no se borra nada).");
 
         System.out.println("\n=== FIN DE LAS PRUEBAS ===");
     }
 }
-
