@@ -30,9 +30,9 @@ public class Sensor {
     @Column(nullable = false)
     private String estado;
 
-    @ManyToOne
-    @JoinColumn(name = "planta_id", nullable = false)
-    private PlantaTratamiento plantaTratamiento; // Relación con PlantaTratamiento
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "planta_id", nullable = true)
+    private PlantaTratamiento plantaTratamiento;
 
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LecturaSensor> lecturas; // Relación con lecturas históricas

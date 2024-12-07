@@ -1,5 +1,6 @@
 package org.example.backendwakandaagua.service;
 
+import jakarta.transaction.Transactional;
 import org.example.backendwakandaagua.domain.usuario.Credenciales;
 import org.example.backendwakandaagua.domain.usuario.Usuario;
 import org.example.backendwakandaagua.model.usuario.UsuarioDTO;
@@ -55,6 +56,7 @@ public class UsuarioService {
     }
 
     // CRUD: Crear un nuevo usuario y sus credenciales
+    @Transactional
     public Long create(UsuarioDTO dto) {
         Usuario usuario = toEntity(dto);
         usuario = usuarioRepository.save(usuario);
@@ -69,6 +71,7 @@ public class UsuarioService {
     }
 
     // CRUD: Actualizar un usuario y sus credenciales
+    @Transactional
     public void update(Long id, UsuarioDTO dto) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
@@ -85,6 +88,7 @@ public class UsuarioService {
     }
 
     // CRUD: Eliminar un usuario y sus credenciales
+    @Transactional
     public void delete(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new RuntimeException("Usuario no encontrado con ID: " + id);

@@ -1,5 +1,6 @@
 package org.example.backendwakandaagua.service;
 
+import jakarta.transaction.Transactional;
 import org.example.backendwakandaagua.domain.sensores.LecturaSensor;
 import org.example.backendwakandaagua.model.sensores.LecturaSensorDTO;
 import org.example.backendwakandaagua.repos.LecturaSensorRepository;
@@ -52,12 +53,14 @@ public class LecturaSensorService {
     }
 
     // Crear una nueva lectura
+    @Transactional
     public LecturaSensorDTO create(LecturaSensor lecturaSensor) {
         LecturaSensor lecturaGuardada = lecturaSensorRepository.save(lecturaSensor);
         return toDTO(lecturaGuardada);
     }
 
     // Actualizar una lectura existente
+    @Transactional
     public LecturaSensorDTO update(Long id, LecturaSensorDTO dto) {
         LecturaSensor lecturaExistente = lecturaSensorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lectura de sensor no encontrada con ID: " + id));
@@ -70,6 +73,7 @@ public class LecturaSensorService {
     }
 
     // Eliminar una lectura por ID
+    @Transactional
     public void delete(Long id) {
         if (!lecturaSensorRepository.existsById(id)) {
             throw new RuntimeException("Lectura de sensor no encontrada con ID: " + id);

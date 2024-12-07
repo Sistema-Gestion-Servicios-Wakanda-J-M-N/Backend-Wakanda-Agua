@@ -1,5 +1,6 @@
 package org.example.backendwakandaagua.service;
 
+import jakarta.transaction.Transactional;
 import org.example.backendwakandaagua.domain.plantaTratamientoAgua.DatosCalidadAgua;
 import org.example.backendwakandaagua.model.plantaTratamientoAgua.DatosCalidadAguaDTO;
 import org.example.backendwakandaagua.repos.DatosCalidadAguaRepository;
@@ -59,41 +60,32 @@ public class DatosCalidadAguaService {
     }
 
     // Crear nuevos datos
+    @Transactional
     public void create(DatosCalidadAguaDTO dto) {
         DatosCalidadAgua datos = toEntity(dto);
         datosCalidadAguaRepository.save(datos);
     }
 
     // Actualizar datos de calidad del agua
+    @Transactional
     public void update(Long id, DatosCalidadAguaDTO dto) {
-        DatosCalidadAgua datosExistentes = datosCalidadAguaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Datos de calidad del agua no encontrados con ID: " + id));
-
-        // Actualizar solo los campos válidos
-        if (dto.getFechaMedicion() != null) {
-            datosExistentes.setFechaMedicion(dto.getFechaMedicion());
+        if (id == null) {
+            throw new IllegalArgumentException("The given id must not be null");
         }
-        if (dto.getNivelPH() != null) {
-            datosExistentes.setNivelPH(dto.getNivelPH());
-        }
-        if (dto.getPorcentajePureza() != null) {
-            datosExistentes.setPorcentajePureza(dto.getPorcentajePureza());
-        }
-        if (dto.getContaminantesDetectados() != null) {
-            datosExistentes.setContaminantesDetectados(dto.getContaminantesDetectados());
-        }
-        if (dto.getCaudalActualLitrosPorSegundo() != null) {
-            datosExistentes.setCaudalActualLitrosPorSegundo(dto.getCaudalActualLitrosPorSegundo());
-        }
-        if (dto.getTemperaturaCelsius() != null) {
-            datosExistentes.setTemperaturaCelsius(dto.getTemperaturaCelsius());
-        }
-
-        // Guardar cambios
-        datosCalidadAguaRepository.save(datosExistentes);
+        DatosCalidadAgua datos = datosCalidadAguaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Datos de calidad no encontrados"));
+        // Update the entity with values from the DTO
+        datos.setFechaMedicion(dto.getFechaMedicion());
+        datos.setNivelPH(dto.getNivelPH());
+        datos.setPorcentajePureza(dto.getPorcentajePureza());
+        datos.setContaminantesDetectados(dto.getContaminantesDetectados());
+        datos.setCaudalActualLitrosPorSegundo(dto.getCaudalActualLitrosPorSegundo());
+        datos.setTemperaturaCelsius(dto.getTemperaturaCelsius());
+        datosCalidadAguaRepository.save(datos);
     }
 
     // Eliminar datos por ID
+    @Transactional
     public void delete(Long id) {
         datosCalidadAguaRepository.deleteById(id);
     }
@@ -101,6 +93,7 @@ public class DatosCalidadAguaService {
     // Generar datos aleatorios para calidad del agua
     public DatosCalidadAgua generarDatosAleatorios() {
         DatosCalidadAgua datos = new DatosCalidadAgua();
+
         datos.setFechaMedicion(LocalDateTime.now());
         datos.setNivelPH(6.5 + (8.5 - 6.5) * random.nextDouble()); // Valores entre 6.5 y 8.5
         datos.setPorcentajePureza(80.0 + (95.0 - 80.0) * random.nextDouble()); // Valores entre 80% y 95%

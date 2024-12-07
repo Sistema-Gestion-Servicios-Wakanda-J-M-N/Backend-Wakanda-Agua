@@ -1,5 +1,6 @@
 package org.example.backendwakandaagua.service;
 
+import jakarta.transaction.Transactional;
 import org.example.backendwakandaagua.domain.plantaTratamientoAgua.PlantaTratamiento;
 import org.example.backendwakandaagua.domain.sensores.Sensor;
 import org.example.backendwakandaagua.domain.sensores.LecturaSensor;
@@ -27,6 +28,7 @@ public class SensorService {
 
     @Autowired
     private LecturaSensorService lecturaSensorService;
+
 
     private final List<Sensor> sensores = new ArrayList<>();
 
@@ -64,14 +66,53 @@ public class SensorService {
         return toDTO(sensor);
     }
 
-    // CRUD: Crear un nuevo sensor
+    @Transactional
     public SensorDTO create(SensorDTO dto) {
         Sensor sensor = toEntity(dto);
         sensor.setUltimaFechaEvento(String.valueOf(LocalDateTime.now()));
+
+        // Obtener todas las plantas
+        List<PlantaTratamientoDTO> plantasDTO = plantaTratamientoService.findAll();
+
+        // Encontrar una planta sin sensores asignados
+        // Suponiendo que si un sensor tiene plantaTratamiento_id = X, significa que esa planta ya tiene un sensor
+        // Necesitamos asegurarnos que una planta sin sensor no aparezca repetida.
+        // Aquí simplemente tomamos la primera planta sin sensor.
+        PlantaTratamiento plantaSinSensor = null;
+        for (PlantaTratamientoDTO plantaDTO : plantasDTO) {
+            // Convertir DTO a entidad para poder usarla
+            PlantaTratamiento planta = plantaTratamientoService.toEntity(plantaDTO);
+
+            // Verificar si existe algún sensor con esta planta
+            List<SensorDTO> sensoresDeLaPlanta = findSensoresByPlanta(planta.getId());
+            // Si la lista está vacía, entonces no tiene sensor asignado
+            if (sensoresDeLaPlanta.isEmpty()) {
+                plantaSinSensor = planta;
+                break;
+            }
+        }
+
+        if (plantaSinSensor == null) {
+            throw new RuntimeException("No hay ninguna planta sin sensor disponible.");
+        }
+
+        // Asignar la planta encontrada al sensor
+        sensor.setPlantaTratamiento(plantaSinSensor);
+
+        // Guardar el sensor
         return toDTO(sensorRepository.save(sensor));
     }
 
+    public List<SensorDTO> findSensoresByPlanta(Long plantaId) {
+        List<Sensor> sensores = sensorRepository.findByPlantaTratamientoId(plantaId);
+        return sensores.stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+
+
+
     // CRUD: Actualizar un sensor
+    @Transactional
     public SensorDTO update(Long id, SensorDTO dto) {
         Sensor sensor = sensorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sensor no encontrado con ID: " + id));
@@ -83,6 +124,7 @@ public class SensorService {
     }
 
     // CRUD: Eliminar un sensor
+    @Transactional
     public void delete(Long id) {
         if (!sensorRepository.existsById(id)) {
             throw new RuntimeException("Sensor no encontrado con ID: " + id);
@@ -116,8 +158,17 @@ public class SensorService {
             PlantaTratamiento planta = plantas.get(i);
             Sensor sensor = sensores.get(i);
 
+            plantaTratamientoService.update(planta.getId(), plantaTratamientoService.toDTO(planta));
             // Obtener los datos de calidad de la planta
             DatosCalidadAgua nuevosDatos = planta.getDatosCalidadAgua();
+            System.out.println("Nuevos datos obtenidos:");
+            System.out.println("ID: " + nuevosDatos.getId());
+            System.out.println("Fecha Medición: " + nuevosDatos.getFechaMedicion());
+            System.out.println("Nivel pH: " + nuevosDatos.getNivelPH());
+            System.out.println("Porcentaje Pureza: " + nuevosDatos.getPorcentajePureza());
+            System.out.println("Contaminantes Detectados: " + nuevosDatos.getContaminantesDetectados());
+            System.out.println("Caudal Actual L/s: " + nuevosDatos.getCaudalActualLitrosPorSegundo());
+            System.out.println("Temperatura °C: " + nuevosDatos.getTemperaturaCelsius());
             sensor.setDatosCalidadAgua(nuevosDatos);
 
             // Crear una nueva lectura histórica usando el servicio LecturaSensorService

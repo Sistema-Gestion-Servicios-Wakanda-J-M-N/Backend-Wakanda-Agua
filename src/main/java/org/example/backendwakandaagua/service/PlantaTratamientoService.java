@@ -1,5 +1,6 @@
 package org.example.backendwakandaagua.service;
 
+import jakarta.transaction.Transactional;
 import org.example.backendwakandaagua.domain.plantaTratamientoAgua.DatosCalidadAgua;
 import org.example.backendwakandaagua.domain.plantaTratamientoAgua.PlantaTratamiento;
 import org.example.backendwakandaagua.model.plantaTratamientoAgua.DatosCalidadAguaDTO;
@@ -29,6 +30,9 @@ public class PlantaTratamientoService {
         dto.setCapacidadMaximaLitros(planta.getCapacidadMaximaLitros());
         dto.setEstadoOperativo(planta.getEstadoOperativo());
         dto.setTipoTratamiento(planta.getTipoTratamiento());
+        if (planta.getDatosCalidadAgua() != null) {
+            dto.setDatosCalidadAgua(datosCalidadAguaService.toDTO(planta.getDatosCalidadAgua()));
+        }
         return dto;
     }
 
@@ -58,6 +62,7 @@ public class PlantaTratamientoService {
     }
 
     // Crear nueva planta
+    @Transactional
     public PlantaTratamientoDTO create(PlantaTratamientoDTO dto) {
         PlantaTratamiento planta = new PlantaTratamiento();
         planta.setNombre(dto.getNombre());
@@ -66,34 +71,39 @@ public class PlantaTratamientoService {
         planta.setEstadoOperativo(dto.getEstadoOperativo());
         planta.setTipoTratamiento(dto.getTipoTratamiento());
 
-        // Generar y asignar datos de calidad del agua
+        // Generar datos sin asignar ID ni persistirlos ahora
         DatosCalidadAgua datos = datosCalidadAguaService.generarDatosAleatorios();
+        // No llamar a datosCalidadAguaService.create(datosDTO) aquí.
+
         planta.setDatosCalidadAgua(datos);
-        DatosCalidadAguaDTO datosDTO = datosCalidadAguaService.toDTO(datos);
-        datosCalidadAguaService.create(datosDTO);
+        // Si cascade = CascadeType.ALL está en la relación, esto persistirá planta y datos juntos
         planta = plantaTratamientoRepository.save(planta);
         return toDTO(planta);
     }
 
     // Actualizar una planta
+    @Transactional
     public PlantaTratamientoDTO update(Long id, PlantaTratamientoDTO dto) {
         PlantaTratamiento planta = plantaTratamientoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Planta de tratamiento no encontrada con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Planta no encontrada con ID: " + id));
+
         planta.setNombre(dto.getNombre());
         planta.setUbicacion(dto.getUbicacion());
         planta.setCapacidadMaximaLitros(dto.getCapacidadMaximaLitros());
         planta.setEstadoOperativo(dto.getEstadoOperativo());
         planta.setTipoTratamiento(dto.getTipoTratamiento());
+
         DatosCalidadAgua nuevosDatos = datosCalidadAguaService.generarDatosAleatorios();
         planta.setDatosCalidadAgua(nuevosDatos);
-        DatosCalidadAguaDTO datosCalidadAguaDTO = datosCalidadAguaService.toDTO(nuevosDatos);
-        datosCalidadAguaService.update(nuevosDatos.getId(), datosCalidadAguaDTO);
-        plantaTratamientoRepository.save(planta);
+
+        // Guardar la planta, esto guardará también los nuevos datos gracias al cascade
         planta = plantaTratamientoRepository.save(planta);
         return toDTO(planta);
     }
 
+
     // Eliminar una planta por ID
+    @Transactional
     public void delete(Long id) {
         if (!plantaTratamientoRepository.existsById(id)) {
             throw new RuntimeException("Planta de tratamiento no encontrada con ID: " + id);
