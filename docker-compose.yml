@@ -1,23 +1,26 @@
 services:
   mysql-wakanda:
     image: mysql:8.0
+    hostname: mysql-wakanda-agua
     environment:
       - MYSQL_DATABASE=Backend-Wakanda-Agua
       - MYSQL_ROOT_PASSWORD=P@ssw0rd
     ports:
       - "3317:3306"
-    container_name: mysql-wakanda-agua
     networks:
       - backend-network
-    volumes:
-      - mysql-data:/var/lib/mysql
+    healthcheck: # Comprueba si MySQL está listo antes de aceptar conexiones
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-P", "3306", "-u", "root", "-pP@ssw0rd" ]
+      interval: 10s
+      retries: 5
+      timeout: 5s
 
   backend_wakanda_agua:
     build:
-      context: .
+      context: ./
+    container_name: backend_wakanda_agua
     ports:
       - "8085:8095"
-    container_name: backend_wakanda_agua
     networks:
       - backend-network
     environment:
@@ -27,6 +30,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-wakanda-agua:3306/Backend-Wakanda-Agua?serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=P@ssw0rd
+    depends_on:
+      mysql-wakanda:
+        condition: service_healthy  # Espera a que MySQL esté "healthy"
     entrypoint:
       [
         "./wait-for-it.sh", "eureka-server:8761", "-t", "60", "--",

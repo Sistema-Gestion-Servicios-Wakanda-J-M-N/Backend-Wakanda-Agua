@@ -4,6 +4,7 @@ spring:
     url: jdbc:mysql://mysql-wakanda-agua:3306/Backend-Wakanda-Agua?serverTimezone=UTC
     username: root
     password: P@ssw0rd
+
     hikari:
       connection-timeout: 30000
       maximum-pool-size: 10
@@ -13,14 +14,15 @@ spring:
     open-in-view: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         jdbc:
           lob:
             non_contextual_creation: true
         id:
           new_generator_mappings: true
 
-    application:
-        name: backend_wakanda_agua
+  application:
+    name: backend_wakanda_agua
 
 server:
   port: 8095
