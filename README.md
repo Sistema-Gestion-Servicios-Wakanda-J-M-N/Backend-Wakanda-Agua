@@ -1,5 +1,6 @@
 # Backend Wakanda Agua
 
+
 1. https://github.com/Sistema-Gestion-Servicios-Wakanda-J-M-N/Frontend-Wakanda
 2. https://github.com/Sistema-Gestion-Servicios-Wakanda-J-M-N/Backend-Wakanda-API-Central   -> API-Central (Gestiona los microservicios y muestra un tablero de Wakanda).
 3. https://github.com/Sistema-Gestion-Servicios-Wakanda-J-M-N/Eureka-Server   -> Eureka-Server/Grafana/Prometheus
@@ -20,11 +21,10 @@
 
 ## Participantes del proyecto
 
-Jaime López Díaz
-Marcos García Benito
-Nicolas Jimenez
-Juan Manuel
-
+- Jaime López Díaz
+- Marcos García Benito
+- Nicolas Jimenez
+- Juan Manuel
 
 ## Servicios
 Este microservicio basado en el tratamiento de agua en Wakanda, contiene varios servicios responsables de gestionar diferentes aspectos del sistema. A continuación, se presenta un desglose de los servicios:
